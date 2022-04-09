@@ -12,7 +12,7 @@ Arrow function cannot work as function constructor because it doesn't have its o
 
 A factory function is a function that returns an object and can be reused to make multiple object instances. It immediately returns the newly-created object.
 
-```
+```javascript
 const monsterFactory = (name, age, energySource, catchPhrase) => {
   return {
     name: name,
@@ -20,8 +20,8 @@ const monsterFactory = (name, age, energySource, catchPhrase) => {
     energySource: energySource,
     scare() {
       console.log(catchPhrase);
-    }
-  }
+    },
+  };
 };
 ```
 
@@ -36,7 +36,7 @@ ghost.scare(); // 'BOO!'
 
 The function name should be **capitalized** to show that this is a _constructor function_.
 
-```
+```javascript
 function BellBoy (name, age, hasWorkPermit, languages) {
 	this.name = name;
 	this.age = age;
@@ -69,23 +69,23 @@ Without the `new` operator, this inside the constructor would not _point to the 
 
 ES6 introduced some new shortcuts for assigning properties to variables known as destructuring.
 
-```
+```javascript
 const monsterFactory = (name, age) => {
   return {
     name: name,
-    age: age
-  }
+    age: age,
+  };
 };
 ```
 
 The example below works exactly like the example above:
 
-```
+```javascript
 const monsterFactory = (name, age) => {
   return {
     name,
-    age
-  }
+    age,
+  };
 };
 ```
 
@@ -93,21 +93,21 @@ const monsterFactory = (name, age) => {
 
 `instanceof` allows you to compare an object to a constructor, returning true or false based on whether or not that object was created with the constructor.
 
-```
-let Bird = function(name, color) {
+```javascript
+let Bird = function (name, color) {
   this.name = name;
   this.color = color;
   this.numLegs = 2;
-}
+};
 
 let crow = new Bird("Alexis", "black");
 
-crow instanceof Bird;  // Returns: true
+crow instanceof Bird; // Returns: true
 ```
 
 ### Own properties
 
-```
+```javascript
 function Bird(name) {
   this.name = name;
   this.numLegs = 2;
@@ -122,7 +122,7 @@ To check whether a property is the object's own property, we can use `duck.hasOw
 
 Properties in the **prototype** are shared among ALL instances of Bird. Here's how to add numLegs to the Bird prototype:
 
-```
+```javascript
 Bird.prototype.numLegs = 2;
 ```
 
@@ -130,12 +130,12 @@ Now all instances of Bird have the numLegs property.
 
 To set multiple _protoptype_ properties more efficiently:
 
-```
+```javascript
 Bird.prototype = {
   numLegs: 2,
-  eat: function() {
+  eat: function () {
     console.log("nom nom nom");
-  }
+  },
 };
 ```
 
@@ -143,9 +143,9 @@ It's good practice to _set methods using prototypes_, for better code performanc
 
 To _print the prototype_ of an object:
 
-```
-console.log(duck.__proto__);  // The prototype
-console.log(duck.__proto__ === Bird.prototype)  // True
+```javascript
+console.log(duck.__proto__); // The prototype
+console.log(duck.__proto__ === Bird.prototype); // True
 ```
 
 The _prototyte of of duck object_ is actually the _prorotype **property** of the constructor function_. `Bird.prototype` here is actually not the prototype of `Bird`, but instead it's gonna be used as the prototype of all objects created with the `Bird` constructor function.
@@ -154,10 +154,10 @@ The _prototyte of of duck object_ is actually the _prorotype **property** of the
 
 The constructor property returns a reference to the Object **constructor function** that created the instance object.
 
-```
+```javascript
 let duck = new Bird();
 
-console.log(duck.constructor === Bird);   // Output: true
+console.log(duck.constructor === Bird); // Output: true
 ```
 
 ==Note:== Since the constructor property can be overwritten (which will be covered in the next two challenges) it’s generally better to use the `instanceof` method to check the type of an object.
@@ -166,19 +166,19 @@ console.log(duck.constructor === Bird);   // Output: true
 
 There is one crucial side effect of manually setting the prototype to a new object. It _erases the constructor property_!
 
-```
-duck.constructor === Bird;  // false
-duck.constructor === Object;  // true
-duck instanceof Bird;  // true
+```javascript
+duck.constructor === Bird; // false
+duck.constructor === Object; // true
+duck instanceof Bird; // true
 ```
 
 To fix this, whenever a prototype is manually set to a new object, remember to _define the constructor property_:
 
-```
+```javascript
 Bird.prototype = {
   constructor: Bird,
   numLegs: 2,
-  eat: function() {
+  eat: function () {
     console.log("nom nom nom");
   },
 };
@@ -188,20 +188,20 @@ Bird.prototype = {
 
 An object inherits its prototype directly from the constructor function that created it.
 
-```
+```javascript
 function Bird(name) {
   this.name = name;
 }
 
 let duck = new Bird("Donald");
-Bird.prototype.isPrototypeOf(duck);  // true
+Bird.prototype.isPrototypeOf(duck); // true
 ```
 
 #### Prototype chain
 
 Because a prototype is an object, a prototype can have its own prototype! In this case, the prototype of `Bird.prototype` is `Object.prototype`.
 
-```
+```javascript
 Object.prototype.isPrototypeOf(Bird.prototype);
 
 // That is: Bird.prototype.__proto__ === Object.prototype
@@ -217,17 +217,17 @@ The `hasOwnProperty` method is defined in `Object.prototype`, which can be acces
 
 Whenever we create a new array, it is actually created by the Array constructor:
 
-```
-const arr = [2, 4, 5];  // Same as: const arr = new Array([2, 4, 5]);
+```javascript
+const arr = [2, 4, 5]; // Same as: const arr = new Array([2, 4, 5]);
 console.log(arr.__proto__ === Array.prototype); // True
-console.log(arr.__proto__.constructor);  // ƒ Array() { [native code] }
+console.log(arr.__proto__.constructor); // ƒ Array() { [native code] }
 ```
 
 Array is actually a constructor function with a `prototype` property. Array.prototype is an object with no key and 36 methods.
 
 The methods contained in Array.prototype (e.g., filter, forEach, slice):
 
-```
+```javascript
 console.log(arr.__proto__);
 // Output:
 [constructor: ƒ, concat: ƒ, copyWithin: ƒ, fill: ƒ, find: ƒ, …]
@@ -246,17 +246,54 @@ console.log(arr.__proto__);
 
 To list the methods in `Array.prototype`:
 
-```
+```javascript
 console.log(Object.getOwnPropertyNames(arr.__proto__));
 // Output:
-(36) ['length', 'constructor', 'concat', 'copyWithin', 'fill', 'find', 'findIndex', 'lastIndexOf', 'pop', 'push', 'reverse', 'shift', 'unshift', 'slice', 'sort', 'splice', 'includes', 'indexOf', 'join', 'keys', 'entries', 'values', 'forEach', 'filter', 'flat', 'flatMap', 'map', 'every', 'some', 'reduce', 'reduceRight', 'toLocaleString', 'toString', 'at', 'findLast', 'findLastIndex']
+(36)[
+  ("length",
+  "constructor",
+  "concat",
+  "copyWithin",
+  "fill",
+  "find",
+  "findIndex",
+  "lastIndexOf",
+  "pop",
+  "push",
+  "reverse",
+  "shift",
+  "unshift",
+  "slice",
+  "sort",
+  "splice",
+  "includes",
+  "indexOf",
+  "join",
+  "keys",
+  "entries",
+  "values",
+  "forEach",
+  "filter",
+  "flat",
+  "flatMap",
+  "map",
+  "every",
+  "some",
+  "reduce",
+  "reduceRight",
+  "toLocaleString",
+  "toString",
+  "at",
+  "findLast",
+  "findLastIndex")
+];
 ```
 
 We can add our own methods to Array.prototype so that every array can use this method (`this` keyword will be the array on which the method is called):
 
-```
+```javascript
 Array.prototype.unique = function () {
-    return [...new Set(this)];
+  return [...new Set(this)];
 };
 const newArr = [3, 5, 6, 4, 3, 6, 7];
 console.log(newArr.unique()); // Output: (5) [3, 5, 6, 4, 7]
@@ -264,15 +301,15 @@ console.log(newArr.unique()); // Output: (5) [3, 5, 6, 4, 7]
 
 The prototype of Array.prototype (an object, a property of Array) is the prototype property of Object.
 
-```
+```javascript
 console.log(arr.__proto__.__proto__ === Object.prototype); // true
-onsole.log(Object);  // ƒ Object() { [native code] }
+onsole.log(Object); // ƒ Object() { [native code] }
 console.log(arr.__proto__.__proto__.constructor); // ƒ Object() { [native code] }
 ```
 
 The methods contained in Object.prototype (e.g., hasOwnProperty, isPrototypeOf, toString):
 
-```
+```javascript
 console.log(arr.__proto__.__proto__);
 // Output:
 {constructor: ƒ, __defineGetter__: ƒ, __defineSetter__: ƒ, hasOwnProperty: ƒ, __lookupGetter__: ƒ, …}
@@ -289,13 +326,13 @@ console.log(arr.__proto__.__proto__);
 
 ## Clearing my thoughts
 
-```
+```javascript
 const Person = function personFunc(name, birthYear) {
-     this.name = name;
-     this.birthYear = birthYear;
+  this.name = name;
+  this.birthYear = birthYear;
 };
 
-const jonas = new Person('Jonas', 1990);
+const jonas = new Person("Jonas", 1990);
 ```
 
 ### jonas
@@ -305,7 +342,7 @@ const jonas = new Person('Jonas', 1990);
 - typeof: object
 - content:
 
-```
+```javascript
 personFunc {name: 'Jonas', birthYear: 1990}
 	birthYear: 1990
 	name: "Jonas"
@@ -316,19 +353,19 @@ personFunc {name: 'Jonas', birthYear: 1990}
 
 - properties:
 
-```
+```javascript
 console.log(Object.keys(jonas));
 
 // Output:
-(2) ['name', 'birthYear']
+(2)[("name", "birthYear")];
 ```
 
-<kp>Prototype of jonas:</kp>: an object with the only property `constructor` that points back to the function itself
+!!!note Prototype of jonas: an object with the only property `constructor` that points back to the function itself
 
 This method returns the prototype (i.e. the value of the internal `[[Prototype]]` property) of the specified object.
 
-```
-console.log(jonas.__proto__);  // === prototype property of Person
+```javascript
+console.log(jonas.__proto__); // === prototype property of Person
 console.log(typeof jonas.__proto__);
 console.log(Object.keys(jonas.__proto__));
 console.log(Object.getOwnPropertyNames(jonas.__proto__));
@@ -336,7 +373,7 @@ console.log(Object.getOwnPropertyNames(jonas.__proto__));
 
 Output:
 
-```
+```javascript
 {constructor: ƒ}
 	constructor: ƒ personFunc(name, birthYear)
 	[[Prototype]]: Object
@@ -352,16 +389,16 @@ object
 ['constructor']  // One method
 ```
 
-<kp>Constructor of jonas</kp>: the function `Person`
+!!!note Constructor of jonas: the function `Person`
 
-```
+```javascript
 console.log(jonas.constructor);
 console.log(typeof jonas.constructor);
 ```
 
 Output:
 
-```
+```javascript
 ƒ personFunc(name, birthYear) {
      this.name = name;
      this.birthYear = birthYear;
@@ -377,7 +414,7 @@ Person is a **function**, it has a `prototype` property which is an object.
 - typeof: function
 - content:
 
-```
+```javascript
 ƒ personFunc(name, birthYear) {
      this.name = name;
      this.birthYear = birthYear;
@@ -386,21 +423,21 @@ Person is a **function**, it has a `prototype` property which is an object.
 
 ==Constructor of `Person.prototype` refers back to itself==
 
-```
-Person.prototype.constructor === Person  // true
+```javascript
+Person.prototype.constructor === Person; // true
 ```
 
 ### Person.prototype / `jonas.__proto__`
 
 <kp>prototype</kp>: the prototype property of Object
 
-```
+```javascript
 console.log(Person.prototype.__proto__);
 ```
 
 Output: same as `Object.prototype`
 
-```
+```javascript
 {constructor: ƒ, __defineGetter__: ƒ, __defineSetter__: ƒ, hasOwnProperty: ƒ, __lookupGetter__: ƒ, …}
 	constructor: ƒ Object()
 	hasOwnProperty: ƒ hasOwnProperty()
@@ -412,15 +449,15 @@ Output: same as `Object.prototype`
 --snap--
 ```
 
-<kp>constructor</kp>
+!!!note constructor
 
-```
+```javascript
 console.log(Person.prototype.__proto__.constructor);
 ```
 
 Output:
 
-```
+```javascript
 ƒ Object() { [native code] }
 ```
 
@@ -434,18 +471,18 @@ Certain languages have privacy built-in for objects, but JavaScript does not hav
 
 Getters are methods that get and return the internal properties of an object.
 
-```
+```javascript
 const person = {
-  _firstName: 'John',
-  _lastName: 'Doe',
+  _firstName: "John",
+  _lastName: "Doe",
   get fullName() {
-    if (this._firstName && this._lastName){
+    if (this._firstName && this._lastName) {
       return `${this._firstName} ${this._lastName}`;
     } else {
-      return 'Missing a first name or a last name.';
+      return "Missing a first name or a last name.";
     }
-  }
-}
+  },
+};
 
 // To call the getter method:
 person.fullName; // 'John Doe'
@@ -455,46 +492,45 @@ person.fullName; // 'John Doe'
 
 Along with getter methods, we can also create setter methods which reassign values of existing properties within an object.
 
-```
+```javascript
 const person = {
   _age: 37,
-  set age(newAge){
-    if (typeof newAge === 'number'){
+  set age(newAge) {
+    if (typeof newAge === "number") {
       this._age = newAge;
     } else {
-      console.log('You must assign a number to age');
+      console.log("You must assign a number to age");
     }
-  }
+  },
 };
 
 // to use the setter method like a property
 person.age = 40;
 console.log(person._age); // Logs: 40
-person.age = '40'; // Logs: You must assign a number to age
+person.age = "40"; // Logs: You must assign a number to age
 ```
 
 ### Use getter and setter to validate value
 
-```
+```javascript
 class PersonCL {
-	constructor (fullName, birthYear) {
-		this.fullName = fullName;
-		this.birthYear = birthYear;
-	}
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
 
-	set fullName(name) {
-		if (name.includes(' ')) {
-			this._fullName = name;
-			// To set a property that aleready exists, add an underscore
-		}
-		else {
-			alert(`${name} is not a full name!`)
-		}
-	}
+  set fullName(name) {
+    if (name.includes(" ")) {
+      this._fullName = name;
+      // To set a property that aleready exists, add an underscore
+    } else {
+      alert(`${name} is not a full name!`);
+    }
+  }
 
-	get fullName() {
-		return this._fullName;
-	}
+  get fullName() {
+    return this._fullName;
+  }
 }
 ```
 
@@ -502,7 +538,7 @@ class PersonCL {
 
 Static methods are not inherited, they are not in the prototype of the object:
 
-```
+```javascript
 PersonCL.hey() = {
 	console.log('hey');
 }
@@ -540,7 +576,7 @@ var zeus = new SpaceShuttle('Jupiter');
 
 The class syntax simply replaces the constructor function creation:
 
-```
+```javascript
 // Class Declaration
 class SpaceShuttle {
   constructor(targetPlanet, speed) {
@@ -579,20 +615,20 @@ It should be noted that the class keyword _declares a new function_, to which a 
 
 We can manually set the prototype of an object to any other object we want. `Object.create(obj)` creates a new object, and sets `obj` _as the new object's prototype_. :
 
-```
+```javascript
 const PersonPro = {
-	calcAge() {
-		console.log(2030 - this.birthYear);
-	},
+  calcAge() {
+    console.log(2030 - this.birthYear);
+  },
 
-	init(firstName, birthYear) {
-		this.firstName = firstName;
-		this.birthYear = birthYear;
-	},
-}
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
 
 const jonas = Object.create(PersonPro);
-jonas.init('jonas', 1998);
+jonas.init("jonas", 1998);
 ```
 
 ## Inheritance
@@ -601,39 +637,39 @@ jonas.init('jonas', 1998);
 
 `Person` and `Student` have some duplicate code:
 
-```
+```javascript
 const Person = function (firstName, birthYear) {
-	this.firstName = firstName;
-	this.birthYear = birthYear;
+  this.firstName = firstName;
+  this.birthYear = birthYear;
 };
 
 const Student = function (firstName, birthYear, course) {
-	this.firstName = firstName;
-	this.birthYear = birthYear;
-	this.course = course;
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+  this.course = course;
 };
 ```
 
 We can replace the duplicate code in `Student` with:
 
-```
+```javascript
 const Student = function (firstName, birthYear, course) {
-	Person.call(this, firstName, birthYear);
-	// Person as a function call
-	this.course = course;
-}
+  Person.call(this, firstName, birthYear);
+  // Person as a function call
+  this.course = course;
+};
 ```
 
 prototype property of `Student` inherits from the prototype property of `Person`:
 
-```
+```javascript
 Student.prototype = Object.create(Person.prototype);
 ```
 
 In other words:
 
-```
-Student.prototype.__proto__ === Person.prototype;  // true
+```javascript
+Student.prototype.__proto__ === Person.prototype; // true
 ```
 
 ==Note:== This should be added **before** all `student.prototype.someMethods`, because `Object.create` will return an empty object. Onto that empty object, we can add methods.
@@ -643,73 +679,74 @@ Student.prototype.__proto__ === Person.prototype;  // true
 
 #### Clearing my thoughts
 
-```
+```javascript
 const Person = function (firstName, birthYear) {
-	this.firstName = firstName;
-	this.birthYear = birthYear;
-    calcAge =function () {
-        console.log(2030 - this.birthYear);
-    };
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+  calcAge = function () {
+    console.log(2030 - this.birthYear);
+  };
 };
 
 const Student = function (firstName, birthYear, course) {
-	Person.call(this, firstName, birthYear);
-	this.course = course;
-    introSelf = function () {
-        console.log(`My name is ${firstName}, I'm studying ${course}.`);
-    };
+  Person.call(this, firstName, birthYear);
+  this.course = course;
+  introSelf = function () {
+    console.log(`My name is ${firstName}, I'm studying ${course}.`);
+  };
 };
 
 Student.prototype = Object.create(Person.prototype);
 Student.prototype.come = function () {
-    console.log("I'm coming!");
+  console.log("I'm coming!");
 };
 
-const mike = new Student('mike', 1999, 'math');
+const mike = new Student("mike", 1999, "math");
 ```
 
-```
-mike.__proto__ === Student.prototype  // true
-mike.__proto__.__proto__ === Person.prototype //true
-mike.constructor === Student  // false
-mike.constructor=== Person  // true
-Student.prototype.constructor === Person  // true
+```javascript
+mike.__proto__ === Student.prototype; // true
+mike.__proto__.__proto__ === Person.prototype; //true
+mike.constructor === Student; // false
+mike.constructor === Person; // true
+Student.prototype.constructor === Person; // true
 ```
 
 We need to manually change the constructor:
 
-```
+```javascript
 Student.prototype.constructor = Student;
 ```
 
 Output:
 
-```
-Student.prototype.constructor === Student  // true
-mike.constructor === Student  // true
+```javascript
+Student.prototype.constructor === Student; // true
+mike.constructor === Student; // true
 ```
 
 ### Using ES6 classes (`extends` and `super`)
 
-```
+```javascript
 class PersonCL {
-	constructor(firstName, birthYear) {
-		this.firstName = firstName;
-		this.birthYear = birthYear;
-	}
-	calcAge = function () {
-		console.log(2030 - this.birthYear);
-	}
-};
+  constructor(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+  calcAge = function () {
+    console.log(2030 - this.birthYear);
+  };
+}
 
-class StudentCL extends PersonCL { // This will link the prototype behind the scenes
-	constructor(firstName, birthYear, course) {
-		super(firstName, birthYear);
-		// Works like the constructor function of parent class
-		// Needs to be put before this keyword
-		this.course = course;
-	}
-};
+class StudentCL extends PersonCL {
+  // This will link the prototype behind the scenes
+  constructor(firstName, birthYear, course) {
+    super(firstName, birthYear);
+    // Works like the constructor function of parent class
+    // Needs to be put before this keyword
+    this.course = course;
+  }
+}
 ```
 
 ==Note:== If we don't need any new parameters in the new class, we don't need to use constructor and super.
@@ -721,29 +758,29 @@ const martha = new StudentCL('martha jones', 1999);
 
 ### Using Object.create()
 
-```
+```javascript
 const PersonProto = {
-	calcAge() {
-		console.log(2030 - this.birthYear);
-	},
+  calcAge() {
+    console.log(2030 - this.birthYear);
+  },
 
-	init(firstName, birthYear) {
-		this.firstName = firstName;
-		this.birthYear = birthYear;
-	},
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
 };
 
 const StudentProto = Object.create(PersonProto);
 StudentProto.init = function (firstName, birthYear, course) {
-	PersonProto.init.call(this, firstName, birthYear);
-	this.course = course;
+  PersonProto.init.call(this, firstName, birthYear);
+  this.course = course;
 };
 StudentProto.introduce = function () {
-	console.log(`My name is ${this.name}and I'm studying ${this.course}`);
+  console.log(`My name is ${this.name}and I'm studying ${this.course}`);
 };
 
 const jay = Object.create(StudentProto);
-jay.init('jay chow', 1998, 'cs');
+jay.init("jay chow", 1998, "cs");
 ```
 
 Here, `PersonProto` is the prototype of `StudentProto`, and `StudentProto` is the prototype of `jay`.
@@ -752,52 +789,52 @@ Here, `PersonProto` is the prototype of `StudentProto`, and `StudentProto` is th
 
 Notice in the example below that the describe method is shared by Bird and Dog:
 
-```
+```javascript
 Bird.prototype = {
   constructor: Bird,
-  describe: function() {
+  describe: function () {
     console.log("My name is " + this.name);
-  }
+  },
 };
 
 Dog.prototype = {
   constructor: Dog,
-  describe: function() {
+  describe: function () {
     console.log("My name is " + this.name);
-  }
+  },
 };
 ```
 
 The code can be edited to follow the **DRY principle** by creating a _supertype_ (or parent) called Animal:
 
-```
-function Animal() { };
+```javascript
+function Animal() {}
 
 Animal.prototype = {
   constructor: Animal,
-  describe: function() {
+  describe: function () {
     console.log("My name is " + this.name);
-  }
+  },
 };
 
 Bird.prototype = {
-  constructor: Bird
+  constructor: Bird,
 };
 
 Dog.prototype = {
-  constructor: Dog
+  constructor: Dog,
 };
 ```
 
 You already know one way to create an instance of Animal using the new operator:
 
-```
+```javascript
 let animal = new Animal();
 ```
 
 There are some disadvantages when using this syntax for inheritance, which are too complex for the scope of this challenge. Instead, here's an alternative approach without those disadvantages:
 
-```
+```javascript
 let animal = Object.create(Animal.prototype);
 ```
 
