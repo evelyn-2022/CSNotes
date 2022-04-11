@@ -1,7 +1,5 @@
 ## Element selector
 
-[toc]
-
 ### Special elements
 
 Special elements don't need to use any selector:
@@ -12,7 +10,7 @@ Special elements don't need to use any selector:
 
 ### getElementBy...
 
-`getElementBy` returns an **HTML collection**. It is a *live collection*, which means that if the DOM changes, then this collection is also immediately updated automatically.
+`getElementBy` returns an **HTML collection**. It is a _live collection_, which means that if the DOM changes, then this collection is also immediately updated automatically.
 
 - `.getElementsByTagName()` search for specific tag name like `<li>`
 - `getElementsByClassName()` search for specific class name, e.g. `document.getElementByClassName("btn");`, return an array;
@@ -20,7 +18,7 @@ Special elements don't need to use any selector:
 
 ### querySelector
 
-- element:  `document.querySelector("l1");`, 
+- element: `document.querySelector("l1");`,
 - class: `document.querySelector(".btn");`,
 - id: `document.querySelector("#title");`
 
@@ -30,16 +28,17 @@ If more than one element match the selector, only the first one will be returned
 
 `querySelectorAll` can select all the elements that match the selector, and return an array. This returns a **node list** of all elements selexted by the selector.
 
-Values are passed in *as strings* in js: `document.querySelectorAll("button")[2].style.color = "red";`
-
+Values are passed in _as strings_ in js: `document.querySelectorAll("button")[2].style.color = "red";`
 
 ## Changing style
 
 `classList` can return a list of all classed attached to the element. Once we have a list of all classes, we can use methods to like `.add` to change the classes.
 Example:
+
 ```
 document.querySelector("button").classList.add("invisible");
 ```
+
 This will add the new class `invisible` to the button element. Then we can use css to modify the value of this new class. We can also use `.remove()` to remove a class, use `.toggle()` change the state, if the class is already applied, remove it, if it's not, add it.
 
 ## Changing text
@@ -49,18 +48,19 @@ This will add the new class `invisible` to the button element. Then we can use c
 
 ## Inserting HTML element
 
-- `element.insertAdjacentHTML(position, text)`. *position* can take four parameters: `beforebegin`, `afterbegin`, `beforeend` and `afterend`.
+- `element.insertAdjacentHTML(position, text)`. _position_ can take four parameters: `beforebegin`, `afterbegin`, `beforeend` and `afterend`.
 - `document.createElement()` to create a DOM element
 - `.prepend()` to insert something as the first child of an element; `.append` add as last child.
 
 ==Note:==
-If we use `prepend` and `append` at the same time, the element will not be both prepended and appended, it will only be moved from before to after because a DOM element is unique and can only exist at one place each time. 
+If we use `prepend` and `append` at the same time, the element will not be both prepended and appended, it will only be moved from before to after because a DOM element is unique and can only exist at one place each time.
+
 ```
 header.prepend(message);
 header.append(message);
 ```
 
-To insert multiple copies of the same element, we first copy the first element and pass in `true`, which means all the child elements will also be copied. 
+To insert multiple copies of the same element, we first copy the first element and pass in `true`, which means all the child elements will also be copied.
 
 ```
 header.append(message.cloneNode(true));
@@ -76,9 +76,9 @@ header.append(message.cloneNode(true));
 
 ## Child & parent node / element
 
- ==child nodes==: `.childNodes`, returns a *live NodeList* of child nodes of the given element where the first child node is assigned index 0. Child nodes include *elements, text and comments*.
+==child nodes==: `.childNodes`, returns a _live NodeList_ of child nodes of the given element where the first child node is assigned index 0. Child nodes include _elements, text and comments_.
 
-==child elements==: to get a collection containing *only elements*, use `.children` instead.
+==child elements==: to get a collection containing _only elements_, use `.children` instead.
 
 ==First / last child node / element==
 First child node: `.firstChild`;
@@ -89,10 +89,12 @@ parent node: `.parentNode`;
 parent element: `parentElement`.
 
 ==Ancestor==:
-The `closest()` method traverses the Element and its parents (heading toward the document root) until it finds a node that matches the provided selector string. Will return itself or the matching ancestor. If no such element exists, it returns *null*.
+The `closest()` method traverses the Element and its parents (heading toward the document root) until it finds a node that matches the provided selector string. Will return itself or the matching ancestor. If no such element exists, it returns _null_.
+
+```javascript
+h1.closest(".header").color = "red";
 ```
-h1.closest('.header').color = 'red';
-```
+
 Set the closest ancestor to h1 element with a class name of header to red.
 
 It is extremely useful in **event delegation**.
@@ -103,25 +105,29 @@ Sibling nodes: `.nextSibling` and `.previousSibling`;
 Sibling elements: `.nextElementSibling` and `.previousElementSibling`.
 
 To get all the siblings (including itself), get to the parent element and get all its child elements from there:
-```
-[...h1.parentElement.children].forEach(function(e) {
-	if (e !== h1) {
-		e.backgroundColor = 'red';
-	}
+
+```javascript
+[...h1.parentElement.children].forEach(function (e) {
+  if (e !== h1) {
+    e.backgroundColor = "red";
+  }
 });
 ```
+
 Here, we set the background color of all h1's siblings to red.
 
 ## Submit button
 
 In HTML, when the submit button is clicked, the page will reload. We can prevent from submitting by adding:
-```
-btn.loginIn.addEventListener('click', function(e) {
-	e.preventDefault();
+
+```javascript
+btn.loginIn.addEventListener("click", function (e) {
+  e.preventDefault();
 });
 ```
 
 To make the area lose focus, use:
-```
+
+```javascript
 inputLogin.blur();
 ```

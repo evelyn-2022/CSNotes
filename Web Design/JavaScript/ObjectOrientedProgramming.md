@@ -144,6 +144,8 @@ Person.prototype.__proto__ === Object.prototype; // true
 Person.prototype.__proto__.constructor === Object; // true
 ```
 
+![](2022-04-10-11-14-13.png)
+
 #### Prototype of arrays
 
 Whenever we create a new array, it is actually created by the `Array` constructor function:
@@ -444,7 +446,7 @@ const PersonCL = class {
 
 ## Object.create
 
-We can manually set the prototype of an object to any other object we want. `Object.create(obj)` creates a new object, and sets `obj` _as the new object's prototype_. :
+We can manually set the prototype of an object to any other object we want. `Object.create(obj)` creates a new object, and sets `obj` _as the new object's prototype_:
 
 ```javascript
 const PersonPro = {
