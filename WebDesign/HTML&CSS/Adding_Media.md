@@ -1,20 +1,20 @@
 # Adding Media
 
-[toc]
-
 ## Adding Images
 
 To add images to a page, we use the `<img>` inline element. The `<img>` element is a selfcontaining, or empty, element. You can also use the `title` attribute with the `<img>` element to provide additional information about the image. Most browsers
-will display the content of this attribute in a tootip when the user hovers over the image. 
+will display the content of this attribute in a tootip when the user hovers over the image.
 
-==Note:== 
+==Note:==
+
 1. Support Image Formats: We most commonly see **jpg images used for photographs** and **png images used for icons or background patterns**. When a picture has an area that is filled with exactly the same color, it is known as **flat color**. Logos, illustrations, and diagrams often use flat colors. (Note that photographs of snow, sky, or grass are not flat colors, they are made up of many subtly different shades of the same color and are not as suited to GIF or PNG format.)
-JPGs, GIFs, and PNGs belong to a type of image format known as **bitmap**. They are made up of lots of miniature squares. **Vector images** are commonly created in programs such as Adobe Illustrator by placing points on a grid, and drawing lines between those points. A color can then be added to "fill in" the lines that have been created.
-3. You should save the image at <u>the same width and height</u> it will appear on the website. If the image is smaller than the width or height that you have specified, the image can be distorted and stretched. If the image is larger than the width and height if you have specified, the image will take longer to display on the page.
-4. Most computer screens only show web pages at 72 pixels per inch (**72 ppi**). So saving images at a higher resolution results in images that are larger than necessary and take longer to download. 
-Images in print materials (such as books and magazines) are made up of tiny circles called <i><u>dots</u></i>. These images are usually printed at a resolution of <i><u>300 dots per inch (dpi)</u></i>.
+   JPGs, GIFs, and PNGs belong to a type of image format known as **bitmap**. They are made up of lots of miniature squares. **Vector images** are commonly created in programs such as Adobe Illustrator by placing points on a grid, and drawing lines between those points. A color can then be added to "fill in" the lines that have been created.
+2. You should save the image at <u>the same width and height</u> it will appear on the website. If the image is smaller than the width or height that you have specified, the image can be distorted and stretched. If the image is larger than the width and height if you have specified, the image will take longer to display on the page.
+3. Most computer screens only show web pages at 72 pixels per inch (**72 ppi**). So saving images at a higher resolution results in images that are larger than necessary and take longer to download.
+   Images in print materials (such as books and magazines) are made up of tiny circles called <i><u>dots</u></i>. These images are usually printed at a resolution of <i><u>300 dots per inch (dpi)</u></i>.
 
 ==Note:== If the image is purely decorative, using an **empty alt attribute** is a best practice.
+
 ```
 <img src="visualDecoration.jpeg" alt="">
 ```
@@ -26,6 +26,7 @@ One option is to use the width and height attributes directly within the `<img>`
 Specifying either a width or height will cause the other dimension to adjust automatically to maintain the aspect ratio of the image.
 
 If your site is designed on a grid, then you might have a selection of image sizes that are commonly used on all pages, such as:
+
 - Small portrait: 220 x 360
 - Small landscape: 330 x 210
 - Feature photo: 620 x 400
@@ -43,6 +44,7 @@ Leaving images untouched in their default positioning isn’t too common. More o
 #### Centering Images
 
 Adding the display property to an image and setting its value to block forces the image to be a **block-level** element. This makes the image appear on its own line, allowing the surrounding content to be positioned above and below the image.
+
 1. On the containing element, you can use the text-align property with a value of center.
 2. On the image itself, you can use the use the margin property and set the values of the left and right margins to auto.
 
@@ -57,7 +59,7 @@ The `background` or `background-image` property within CSS is the preferred opti
 
 ### `figure` element and the related `figcaption`
 
-Used together, these items wrap a visual representation (like an image, diagram, or chart) along with its caption. 
+Used together, these items wrap a visual representation (like an image, diagram, or chart) along with its caption.
 
 Here's an example - note that the `figcaption` goes inside the `figure` tags and can be combined with other elements:
 
@@ -90,9 +92,9 @@ The `src` attribute on the `<audio>` element includes **autoplay, controls, loop
 The **autoplay, controls, and loop** attributes are all **Boolean attributes**. As Boolean attributes, they **don’t require a stated value**. Instead, when each is present on the `<audio>` element its value will be set to true, and the `<audio>` element will behave accordingly.
 
 - autoplay: nothing will appear on the page, but the audio file will automatically play upon loading.
-- controls:  display a browser’s default audio controls, including play and pause, seek, and volume controls.
+- controls: display a browser’s default audio controls, including play and pause, seek, and volume controls.
 - loop: cause an audio file to repeat continually, from beginning to end.
-- preload: helps identify what, if any, information about the audio file should be loaded before the clip is played.  It accepts three values: **none**(won't preload any information about audio file), **auto**(will preload all information), and **metadata**(will preload any available metadata information, but not all information). When the preload attribute isn’t present on the `<audio>` element, all information about an audio file is loaded, as if the value was set to `auto`. For this reason, **using the preload attribute with a value of metadata or none** is a good idea when an audio file is not essential to a page. It’ll help to conserve bandwidth and allow pages to load faster.
+- preload: helps identify what, if any, information about the audio file should be loaded before the clip is played. It accepts three values: **none**(won't preload any information about audio file), **auto**(will preload all information), and **metadata**(will preload any available metadata information, but not all information). When the preload attribute isn’t present on the `<audio>` element, all information about an audio file is loaded, as if the value was set to `auto`. For this reason, **using the preload attribute with a value of metadata or none** is a good idea when an audio file is not essential to a page. It’ll help to conserve bandwidth and allow pages to load faster.
 
 ### Audio Fallbacks & Multiple Sources
 
@@ -118,7 +120,7 @@ Some browsers may not support the `<audio>` element. In this case, we can provid
 
 Adding video in HTML5 is very similar to adding audio. We use the `<video>` element in place of the `<audio>` element. All of the same attributes (src, autoplay, controls, loop, and preload) and fallbacks apply here, too. In general, the best practice here is to include the `controls` Boolean attribute unless there is a good reason not to allow users to start, stop, or replay the video.
 
-Since videos take up space on the page, we can specify their dimensions, which is most commonly done with width and height properties in CSS. 
+Since videos take up space on the page, we can specify their dimensions, which is most commonly done with width and height properties in CSS.
 
 ### Poster Attribute
 
@@ -133,7 +135,6 @@ The `poster` attribute allows us to specify an image, in the form of a URL, to b
 The same markup format, with multiple `<source>` elements for each file type and a plain text fallback, also applies within the `<video>` element.
 
 One additional fallback option that could be used in place of a plain text fallback is to use a YouTube or Vimeo embedded video.
-
 
 <br>
 <br>
