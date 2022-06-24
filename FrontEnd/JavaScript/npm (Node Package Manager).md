@@ -1,7 +1,7 @@
 # npm (Node Package Manager)
 
-NPM is both the repository in which packages live and a program that we use on our computers to install and manage these packages.
-![](2022-05-17-14-05-25.png)
+NPM is a JavaScript package manager. It is pre-installed with _Node.js_. It's both the repository in which packages live and a program that we use on our computers to install and manage these packages.
+![](./resources/build-process.png)
 
 1. Development Process
    We divide our projects into multiple modules and these modules can share data between them and make our code more organized and maintainable.
@@ -22,7 +22,7 @@ We end up with the final JavaScript bundle ready to be deployed on a server for 
 
 ## How to use npm
 
-In each project in which we want to use NPM, we need to start by initializing it with `npm init` in order to create a `package.json` file.
+In each project in which we want to use NPM, we need to start by initializing it with `npm init` in order to create a `package.json` file. To create the file without answering any questions, use `npm init -y` or `npm init --yes`. To change the default answer, `npm config set init-author-name "your name"` or `npm set init-license "MIT"`.
 
 `npm install packageName` or `npm i packageName` to install a package. The package name will show in the `dependencies` in `package.json`, and a folder named `node_modules` will be added to the current folder. Our library is installed in this `node_modules` folder.
 
@@ -30,7 +30,36 @@ If we want to use the library, we need to use a **module bundler** because the l
 
 ### Using npm to install lodash
 
-To install lodash, we can use lodash-es version, which uses ES modules instead of commonJS modules.
+To install lodash:
+
+1. lodash-es version (ES module)
+   `npm install lodash-es --save`. `--save` saves it to _package.json_ as dependency. If we don't include the flag, the package will be installed, but will not be saved to _package.json_.
+2. lodash (commonJS module)
+   Almost all the modules in npm repository use commonJS module system.
+
+   ```node
+   <!-- Export -->
+   export.functionName = function () {
+     functionBody;
+   };
+
+   <!-- Import -->
+   const {functionName} = require('moduleName');
+   ```
+
+   `npm install lodash --save`:
+
+   ```javascript
+   const _ = require("lodash");
+
+   const numbers = [22, 44, 64, 29, 9];
+   _.each(numbers, function (number, i) {
+     console.log(number, i);
+   });
+   ```
+
+   Use `node index` or `node index.js` in terminal to run the file.
+
 There is a `cloneDeep` function in lodash which is very handy for creating a deep clone. `Object.assign()` can only copy property values. If the source value is a reference to an object, it only copies the reference value..
 
 ```javascript
@@ -62,11 +91,37 @@ import { cloneDeep } from "lodash-es";
 
 ### Don't include the `npm_modules` folder when copying your project
 
-When we don't have the folder, use `npm install` or `npm i` to reach into `package.json` file, look at all the dependencies and install them back .
+_npm_modules_ can get huge, because it will not only include your dependencies, but also dependencies of these dependencies. It's usually put in .gitignore so that it will not be push to git. When we don't have the folder, use `npm install` or `npm i` to reach into `package.json` file, look at all the dependencies and install them back. This will install all dependencies, including devDependencies. If we only want dependencies in production, use `npm install --production`.
 
 ### Installing parcel
 
-Write `npm i parcel --save-dev` or `npm i parcel -D` because parcel is a devDependency.
+Write `npm i parcel --save-dev` or `npm i parcel -D` because parcel is a devDependency. devDependencies are only needed in development, they won't be needed in production.
+
+### Uninstalling
+
+`npm uninstall parcel --save-dev` to remove the devDependency from node_modules and package.json. We can also use `npm rm ...`, `npm remove ...` or `npm un ...`. To remove regular dependency, `npm uninstall lodash --save`.
+
+### Updating
+
+1. We can specify the version we want to install: `npm install lodash@4.17.3 --save`.
+2. To update to the latest version, `npm update lodash`.
+
+### Listing packages
+
+`npm list`: to list all packages
+
+`npm list --depth 0`: only list the top level
+
+`npm list --depth 1`: top and second level
+
+==Note:==
+Semantic Version:
+![](./resources/semantic-versioning.png)
+
+- The caret `^` symbol in _package.json_ file (e.g., `"lodash": "^4.17.4"`): when someone runs `npm install`, the **latest minor** version will be installed;
+- `"~4.17.4"` means to save the minor version and only update patch version.
+- When there's no caret or tilda symbol, it means to install this exact version.
+- `"lodash": "*"`: install the absolute latest version.
 
 #### Running locally installed packages:
 
@@ -95,7 +150,8 @@ Whenever we change one of the modules, it will then trigger a rebuild, but that 
 
 ### Install packages globally
 
-`npm i parcel -g` to install packages globally. Then we can use the global tools directly in the command line without the intermediate step of an npm script. However, most of these tools actually _advise developers to always install the tools locally_ so that they can always stay on the latest version.
+`npm i parcel -g` to install packages globally. Then we can use the global tools directly in the command line without the intermediate step of an npm script. It will not show up in node*modules folder. `npm root -g` can show you where these packages go.
+However, most of these tools actually *advise developers to always install the tools locally\* so that they can always stay on the latest version.
 
 ## Polyfilling
 

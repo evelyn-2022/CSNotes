@@ -12,12 +12,15 @@ request.addEventListener("load", function () {
 });
 ```
 
+We cannot assign the data directly with `const data = request.send()` because the data is not there yet. Instead, we need to listen for it to be loaded before using the data.
+The responsetext here will be pure text from json file. so we need to use `JSON.parse()`to convert it.
+
 2. Using FETCH API:
 
-`fetch` will immediately return a Promise
+`fetch` will immediately return a **Promise**
 
 ```javascript
-const request = fetch("https://restcountries.com/v3.1/name/united");
+const request = fetch("https://restcountries.com/v3.1/n ame/united");
 ```
 
 3. To consume a promise:
@@ -31,7 +34,7 @@ const request = fetch("https://restcountries.com/v3.1/name/united").then(
 );
 ```
 
-In order to look at the data, we need to call the `json` method. But the `json` method itself is also an asynchronous function, and will also return a new promise. So we need to return it and call another `then` method.
+The code above will give us a response object, which contains data as ReadableStream in body. In order to look at the data, we need to call the `json` method. But the `json` method itself is also an asynchronous function, and will also return a new promise. So we need to return it and call another `then` method.
 
 ```javascript
 const request = fetch("https://restcountries.com/v3.1/name/united")
@@ -165,7 +168,7 @@ const getCountryData = function (country) {
     .then((data) => {
       renderCountry(data[0]);
       const neighbour = data[0].borders[0];
-      if (!neighbourr) return;
+      if (!neighbour) return;
 
       return fetch(`https://restcountries.com/v3.1/alpha${neighbour}"`);
     })
@@ -216,9 +219,9 @@ const getCountryData = function (country) {
 ## Asynchronous way
 
 Since JavaScript only has one thread of execution, asynchronous tasks will run in the **web API environment** of the browser, not in call stack where code is actually executed.
-![](2022-05-16-09-21-44.png)
+![](./resources/runtime-in-browser.png)
 The callback functions will be put into callback queue waiting in line. This means that if we have a function `setTimeout((someFunction), 5000)`, the callback function will be added to callback queue after five minutes. But if there are any other callback functions in the queue, it has to wait for some time. So the timer duration that you define is not a guarantee.
-![](2022-05-16-09-24-27.png)
+![](./resources/callback-queue.png)
 
 **Event loop:**
 Event loop looks into the call stack and determines whether it's empty or not. If the stack is indeed empty, which means that there's currently no code being executed, then it will take the first **callback** from the **callback queue** and put it on the **call stack** two will be executed. This is called an **event loop tick**.

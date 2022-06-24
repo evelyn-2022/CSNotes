@@ -1,28 +1,26 @@
-
 # Conditionals and operators
-
-[toc]
 
 ## Loops
 
-```
-for (var key in object)
-{
-	// use object[key] in here
+```js
+for (var key in object) {
+  // use object[key] in here
 }
 ```
 
 To loop through all elements:
 
-```
-var students = [/*..*/];
+```js
+var students = [
+  /*..*/
+];
 
 for (let i = 0; i < students.length; i++) {
-	greetStudent(students[i]);
+  greetStudent(students[i]);
 }
 
 for (let student of students) {
-	greetStudent(student);
+  greetStudent(student);
 }
 ```
 
@@ -39,15 +37,15 @@ If we need the current index, we can use `for (let student of students.entries()
 ## Operators
 
 - binary operators: `+`, `-`...
-- unary operators: `!`, *a single operand* involved in the operation, such as `!true`
+- unary operators: `!`, _a single operand_ involved in the operation, such as `!true`
 
 ### Short-circuit evaluation
 
-```
+```js
 // OR OPERATOR
-console.log('jonas' || 3);  
+console.log("jonas" || 3);
 // Prints: jonas
-console.log('' || 3); 
+console.log("" || 3);
 // Prints: 3
 console.log(undefined, null);
 // Prints: null (even though null is also a falsy value)
@@ -55,7 +53,7 @@ console.log(undefined, null);
 // AND OPERATOR
 console.log(0 && 3);
 // Prints: 0 (return the first falsy value without evaluating the second operand)
-console.log(3 && "jonas")
+console.log(3 && "jonas");
 // Prints: jonas
 ```
 
@@ -63,7 +61,7 @@ console.log(3 && "jonas")
 
 Problem with value 0 when using `||`:
 
-```
+```js
 const guestNum = 0;
 console.log(guestNum || 10);
 // Prints: 10 (but  guestNum is actually defined)
@@ -71,11 +69,11 @@ console.log(guestNum || 10);
 
 This operator was introduced in ES 2000:
 
-```
+```js
 const guestNum = 0;
 console.log(guestNum ?? 10);
 // Prints: 0
-``` 
+```
 
 nullish: null and undefined, so 0 and empty string will not be falsy values
 
@@ -83,15 +81,15 @@ nullish: null and undefined, so 0 and empty string will not be falsy values
 
 Introduced in 2021
 
-```
+```js
 const rest1 = {
-	name: 'Carp',
-	numGuests: 20
+  name: "Carp",
+  numGuests: 20,
 };
 
 const rest2 = {
-	name: 'La Piazza',
-	owner: 'Jack'
+  name: "La Piazza",
+  owner: "Jack",
 };
 
 rest1.numGuests ||= 10;
@@ -109,9 +107,9 @@ We can use the logical nullish assignment operator `??=` if the value is 0.
 
 The AND assignment operator assigns a value to a variable if the variable is currently truthy.
 
-```
-rest1.owner &&= '<ANONYMOUS>';
-rest2.owner &&= '<ANONYMOUS>';
+```js
+rest1.owner &&= "<ANONYMOUS>";
+rest2.owner &&= "<ANONYMOUS>";
 console.log(rest1);
 // Prints: {name: 'Carp',numGuests: 20}
 console.log(rest2);
@@ -124,45 +122,46 @@ console.log(rest2);
 isNightTime ? console.log('Turn on the lights!') : console.log('Turn off the lights!');
 ```
 
-It has the same effect as 
+It has the same effect as
 
-```
+```js
 if (isNightTime) {
-  console.log('Turn on the lights!');
+  console.log("Turn on the lights!");
 } else {
-  console.log('Turn off the lights!');
+  console.log("Turn off the lights!");
 }
 ```
 
 #### Multiple Conditional (Ternary) Operators
 
-```
+```js
 function findGreaterOrEqual(a, b) {
-  return (a === b) ? "a and b are equal" 
-    : (a > b) ? "a is greater" 
+  return a === b
+    ? "a and b are equal"
+    : a > b
+    ? "a is greater"
     : "b is greater";
 }
 ```
 
 #### Optional Chaining
 
-The `?.` operator is like the `.` chaining operator, except that instead of causing an error if a reference is *nullish* (null or undefined), the expression short-circuits with a return value of `undefined`. 
+The `?.` operator is like the `.` chaining operator, except that instead of causing an error if a reference is _nullish_ (null or undefined), the expression short-circuits with a return value of `undefined`.
 
 ### Difference between `i++` and `++i`
 
 `++i` will increment the value of i, and then return the incremented value.
 
-```
+```js
  i = 1;
  j = ++i;
  (i is 2, j is 2)
- ```
- 
+```
+
 ` i++` will increment the value of i, but return the original value that i held before being incremented.
 
-```
+```js
  i = 1;
  j = i++;
  (i is 2, j is 1)
- ```
- 
+```

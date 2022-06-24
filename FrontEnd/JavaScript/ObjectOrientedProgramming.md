@@ -2,7 +2,7 @@
 
 ## OOP in JavaScript
 
-![](2022-04-09-14-00-28.png)
+![](./resources/oop.png)
 
 ## Three ways of creating prototypes
 
@@ -144,7 +144,7 @@ Person.prototype.__proto__ === Object.prototype; // true
 Person.prototype.__proto__.constructor === Object; // true
 ```
 
-![](2022-04-10-11-14-13.png)
+![](./resources/prototype.png)
 
 #### Prototype of arrays
 

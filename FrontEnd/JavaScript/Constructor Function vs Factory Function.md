@@ -44,7 +44,7 @@ But if there is a `return` statement, then the rule is simple:
 If `return` is called with an object, then the object is returned instead of this.
 If `return` is called with a primitive, it’s ignored.
 
-!!!attention It's bad practice to create methods inside of a constructor function. Instead, use prototype or protopype inheritance.
+==Note:== It's bad practice to create methods inside of a constructor function. Instead, use prototype or protopype inheritance.
 
 ## Factory Function
 

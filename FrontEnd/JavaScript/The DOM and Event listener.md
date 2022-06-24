@@ -1,7 +1,5 @@
 ## The DOM
 
-[toc]
-
 We called a method on `document`. `document` is a globally available variable in the browser that you use to interact with the HTML and CSS.
 
 To modify multiple elements:

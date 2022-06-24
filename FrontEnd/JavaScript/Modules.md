@@ -5,7 +5,7 @@
 
 As of ES6, JavaScript has a native built-in module system. ES6 modules are modules that are actually stored in files and **each file is one module**.
 
-![](2022-05-17-16-26-52.png)
+![](./resources/es6-modules.png)
 ==Note:==
 
 1. `export` and `import` can only happen _at the top level_, which means they can only happen at the top level, outside any function or block.
@@ -13,7 +13,7 @@ As of ES6, JavaScript has a native built-in module system. ES6 modules are modul
    Only after all imported modules have been downloaded and executed, the main js module will be executed. Modules are imported **synchronously**.
 3. After the parsing process, it has figured out which modules needs to import, then these modules are actually downloaded from the server. Downloading happens in an **asynchronous** way.
 4. Exported values are not copied to imports. Instead, the import is basically just **a reference to** the exported value, like a pointer. (live connection)
-   ![](2022-05-17-17-09-48.png)
+   ![](./resources/importing-modules.pngg)
 
 ## Exporting and importing in ES6 modules
 

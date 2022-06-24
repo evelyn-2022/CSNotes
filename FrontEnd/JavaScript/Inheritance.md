@@ -70,7 +70,7 @@ Output:
 mike.constructor === Student; // true
 ```
 
-![](2022-04-10-11-15-55.png)
+![](./resources/prototype.png)
 
 ## Using ES6 classes (`extends` and `super`)
 
