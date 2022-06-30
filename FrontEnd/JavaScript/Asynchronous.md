@@ -64,7 +64,7 @@ const getCountryData = function (country) {
 };
 ```
 
-(2) Catch error when the first `fetch` method or the second is rejected:
+(2) Catch error when the first or the second `fetch` method is rejected:
 
 ```javascript
 const getCountryData = function (country) {
@@ -90,7 +90,33 @@ const getCountryData = function (country) {
 };
 ```
 
-But we can also handle the error at the end of the chain by adding a `catch` method. Errors will propogate down the chain until they are caught. An error is actually a javascript object and has `message` property:
+==Note:== the `.then()` method takes up to two arguments; the first argument is a callback function for the resolved case of the promise, and the second argument is a callback function for the rejected case. Each `.then()` **returns a newly generated ==promise object==**, which can optionally be used for chaining.
+
+Processing continues to the next link of the chain even when a `.then()` **lacks a callback function that returns a Promise object**. Therefore, a chain can safely omit every rejection callback function until the final `.catch()`. Example:
+
+```js
+myPromise
+  .then((value) => {
+    return value + " and bar";
+  })
+  .then((value) => {
+    return value + " and bar again";
+  })
+  .then((value) => {
+    return value + " and again";
+  })
+  .then((value) => {
+    return value + " and again";
+  })
+  .then((value) => {
+    console.log(value);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+```
+
+Errors will propogate down the chain until they are caught. An error is actually a javascript object and has `message` property:
 
 ```javascript
 const renderCountry = function (data, className = "") {
@@ -224,7 +250,7 @@ The callback functions will be put into callback queue waiting in line. This mea
 ![](./resources/callback-queue.png)
 
 **Event loop:**
-Event loop looks into the call stack and determines whether it's empty or not. If the stack is indeed empty, which means that there's currently no code being executed, then it will take the first **callback** from the **callback queue** and put it on the **call stack** two will be executed. This is called an **event loop tick**.
+Event loop looks into the call stack and determines whether it's empty or not. If the stack is indeed empty, which means that there's currently no code being executed, then it will take the first **callback** from the **callback queue** and put it on the **call stack** to be executed. This is called an **event loop tick**.
 
 To sum up what happens in the code:
 
@@ -243,15 +269,63 @@ Promise.resolve("Resolved promise 1").then((res) => console.log(res));
 console.log("Test end");
 
 // Output
-Test start
-Test end
-Resolved promise
-0 sec timer
+// Test start
+// Test end
+// Resolved promise
+// 0 sec timer
+```
+
+#### Example 2
+
+```js
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+wait(0).then(() => console.log(4));
+Promise.resolve()
+  .then(() => console.log(2))
+  .then(() => console.log(3));
+console.log(1); // 1, 2, 3, 4
+```
+
+#### Example 3
+
+```js
+const promise = new Promise(function (resolve, reject) {
+  console.log("Promise callback");
+  resolve();
+}).then(function (result) {
+  console.log("Promise callback (.then)");
+});
+
+setTimeout(function () {
+  console.log("event-loop cycle: Promise (fulfilled)", promise);
+}, 0);
+
+console.log("Promise (pending)", promise);
+
+// Output
+// Promise callback
+// Promise (pending) Promise {<pending>}
+// Promise callback (.then)
+// event-loop cycle: Promise (fulfilled) Promise {<fulfilled>}
 ```
 
 ## Building a promise
 
-A promise is a kind of JavaScript object. A promise constructor takes exactly one argument, which is the so-called **executor function**. As soon as the promise constructor runs, it will automatically execute this executor function, which takes two other arguments, resolve and reject functions.
+A promise is a kind of JavaScript object. A promise constructor takes exactly one argument, which is the so-called **executor function**. As soon as the promise constructor runs, it will _automatically execute this executor function_, which takes two other arguments, resolve and reject functions.
+
+The executer function will run immediately (like the constructor function in ES6 classes):
+
+```js
+const promise = new Promise(function (resolve, reject) {
+  console.log("Promise callback");
+});
+
+// Output:
+// Promise callback
+```
+
+`resolutionFunc` and `rejectionFunc` are also functions, and you can give them whatever actual names you want. They accept **a single parameter** of any type.
 
 ```javascript
 const lotteryPromise = new Promise(function (resolve, reject) {
@@ -292,7 +366,14 @@ Promise.resolve("You win").then((res) => console.log(res));
 Promise.reject(new Error("You lose")).catch((err) => console.error(err));
 ```
 
-This promise will resolve immediately.
+This promise will resolve immediately. The `Promise.resolve()` method returns a Promise object that is resolved with a given value
+
+```js
+const a = Promise.resolve("success");
+console.log(a);
+
+// Output: Promise {<fulfilled>: 'success'}
+```
 
 ### Promisifying the geolocation API
 
@@ -343,6 +424,36 @@ const whereAmI = async function (country) {
   renderCountry(data[0]);
 };
 ```
+
+#### My Notes
+
+==Async functions always return a promise.== `await` returns the **fulfilled value of the promise**, or the value itself if it's not a `Promise`.
+
+```js
+async function foo() {
+  return 1;
+}
+
+console.log(foo()); // 1st
+
+async function boo() {
+  const a = await 1;
+  console.log(a); // 3rd
+  return a;
+}
+
+const result = boo();
+console.log(result); // 2nd
+```
+
+```bash
+# Output:
+Promise {<fulfilled>: 1}
+Promise {<pending>}
+1
+```
+
+We cannot directly access the fulfilled value of `await` or `then` _outside_ of the function, because both of them always **returns a promise**.
 
 ### `try...catch` statement
 
