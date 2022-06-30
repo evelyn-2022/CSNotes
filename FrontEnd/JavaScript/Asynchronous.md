@@ -44,6 +44,34 @@ const request = fetch("https://restcountries.com/v3.1/name/united")
   });
 ```
 
+==Note:== Each `.then()` **returns a newly generated ==promise object==**, which can optionally be used for chaining. The value returned by `then` will become _the fulfilled value of the promise_.
+
+Processing continues to the next link of the chain even when a `.then()` **lacks a callback function that returns a Promise object**. Therefore, a chain can safely omit every rejection callback function until the final `.catch()`. Example:
+
+```js
+Promise.resolve("foo")
+  .then((value) => {
+    return value + " and bar";
+  })
+  .then((value) => {
+    return value + " and bar again";
+  })
+  .then((value) => {
+    return value + " and again";
+  })
+  .then((value) => {
+    return value + " and again";
+  })
+  .then((value) => {
+    console.log(value);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+// foo and bar and bar again and again and again
+```
+
 To add a neighbouring country, we use `fetch` to return a new promise and avoid **callback hell**:
 
 ```javascript
@@ -64,7 +92,7 @@ const getCountryData = function (country) {
 };
 ```
 
-(2) Catch error when the first or the second `fetch` method is rejected:
+(2) The `.then()` method takes up to two arguments; the first argument is a callback function for the resolved case of the promise, and the second argument is a callback function for the rejected case. Catch error when the first or the second `fetch` method is rejected:
 
 ```javascript
 const getCountryData = function (country) {
@@ -88,32 +116,6 @@ const getCountryData = function (country) {
       renderCountry(data, "neighbour");
     });
 };
-```
-
-==Note:== the `.then()` method takes up to two arguments; the first argument is a callback function for the resolved case of the promise, and the second argument is a callback function for the rejected case. Each `.then()` **returns a newly generated ==promise object==**, which can optionally be used for chaining.
-
-Processing continues to the next link of the chain even when a `.then()` **lacks a callback function that returns a Promise object**. Therefore, a chain can safely omit every rejection callback function until the final `.catch()`. Example:
-
-```js
-myPromise
-  .then((value) => {
-    return value + " and bar";
-  })
-  .then((value) => {
-    return value + " and bar again";
-  })
-  .then((value) => {
-    return value + " and again";
-  })
-  .then((value) => {
-    return value + " and again";
-  })
-  .then((value) => {
-    console.log(value);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
 ```
 
 Errors will propogate down the chain until they are caught. An error is actually a javascript object and has `message` property:
@@ -211,7 +213,7 @@ const getCountryData = function (country) {
 };
 ```
 
-3. `fetch` promise only rejects when there's no internet connection. But with status code 404 or 403 error, the `fetch` method will still get fulfilled, so `catch` cannot pick up this error. The response will contain an `ok` property which can be either `true` or `false`, and we can use it to throw new error. This will immediately reject the promise and pass down to `catch` method. This error message will be shown in `err.message`:
+3. `fetch` promise only rejects when there's _no internet connection_. But with status code 404 or 403 error, the `fetch` method will still get fulfilled, so `catch` cannot pick up this error. The response will contain an `ok` property which can be either `true` or `false`, and we can use it to throw new error. This will immediately reject the promise and pass down to `catch` method. This error message will be shown in `err.message`:
 
 ```javascript
 const getCountryData = function (country) {
@@ -229,10 +231,50 @@ const getCountryData = function (country) {
 
       return fetch(`https://restcountries.com/v3.1/alpha${neighbour}"`);
     })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Country not found (${response.status}). `);
+      }
+      return response.json();
+    })
     .then((data) => {
       renderCountry(data, "neighbour");
     })
+    .catch((err) => {
+      renderError(`Something went wrong. ${err.message}`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
+};
+```
+
+But here, we are repeating ourselves with the `json` function and `throw new Error`, so we can create a new helper function to encapsulate them:
+
+```js
+const getJSON = function (url, errorMsg = "Something went wrong") {
+  return fetch(url).then((response) => {
+    if (!response.ok) {
+      throw new Error(`${errorMsg} ${response.status}`);
+    }
+    return response.json();
+  });
+};
+
+const getCountryData = function (country) {
+  getJSON(`https://restcountries.com/v3.1/name/${country}`, "Country not found")
+    .then((data) => {
+      renderCountry(data[0]);
+      const neighbour = data[0].borders?.[0];
+      if (!neighbour) throw new Error("No neighbour found!");
+
+      return getJSON(
+        `https://restcountries.com/v3.1/alpha/${neighbour}`,
+        "Country not found"
+      );
+    })
+    .then((neighbourData) => renderCountry(neighbourData[0], "neighbour"))
+    // Every error will propogate to catch method here
     .catch((err) => {
       renderError(`Something went wrong. ${err.message}`);
     })
@@ -366,7 +408,7 @@ Promise.resolve("You win").then((res) => console.log(res));
 Promise.reject(new Error("You lose")).catch((err) => console.error(err));
 ```
 
-This promise will resolve immediately. The `Promise.resolve()` method returns a Promise object that is resolved with a given value
+This promise will resolve immediately. The `Promise.resolve()` method returns a Promise object that is resolved with a given value:
 
 ```js
 const a = Promise.resolve("success");
