@@ -472,7 +472,7 @@ const whereAmI = async function (country) {
 
 #### My Notes
 
-==Async functions always return a promise.== `await` returns the **fulfilled value of the promise**, or the value itself if it's not a `Promise`.
+<mark>Async functions always return a promise.</mark>`await` returns the **fulfilled value of the promise**, or the value itself if it's not a `Promise`.
 
 ```js
 async function foo() {
