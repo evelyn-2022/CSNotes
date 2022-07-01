@@ -322,6 +322,8 @@ console.log("Test end");
 // 0 sec timer
 ```
 
+Note: Top level code (code outside of any callback) will run first.
+
 #### Example 2
 
 ```js
@@ -404,7 +406,7 @@ const wait = function (seconds) {
 wait(2).then(() => console.log("Two seconds later"));
 ```
 
-Here in this case, we're actually not even going to pass any resolved value into the resolve function because that's actually not mandatory. In `then` method, because no value is received, we just leave it empty.
+Here in this case, we're actually not even going to pass any resolved value into the resolve function because that's actually not mandatory. In the `then` method, because no value is received, we just leave it empty.
 
 ### Immediately fulfilled/rejected promise
 
@@ -474,7 +476,7 @@ const whereAmI = async function (country) {
 
 #### My Notes
 
-<mark>Async functions always return a promise.</mark>`await` returns the **fulfilled value of the promise**, or the value itself if it's not a `Promise`.
+<mark>🟡 Async functions always return a promise.</mark>`await` returns the **fulfilled value of the promise**, or the value itself if it's not a `Promise`.
 
 ```js
 async function foo() {
@@ -500,21 +502,21 @@ Promise {<pending>}
 1
 ```
 
-We cannot directly access the fulfilled value of `await` or `then` _outside_ of the function, because both of them always **returns a promise**.
+❗️❗️ We cannot directly access the fulfilled value of `await` or `then` _outside_ of the function, because both of them always **returns a promise**.
 
 ### `try...catch` statement
 
 `try/catch` is used in regular JavaScript as well and has nothing to do with `async/await`, but we can use it here to catch errors in async functions.
 
 ```javascript
-try {
-  const getPosition = function () {
-    return new Promise(function (resolve, reject) {
-      navigator.geolocation.getCurrentPosition(resolve, reject);
-    });
-  };
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
 
-  const whereAmI = async function (country) {
+const whereAmI = async function (country) {
+  try {
     // Geolocations
     const pos = await getPosition();
     const { latitude: lat, longitude: lng } = pos.coords;
@@ -531,11 +533,13 @@ try {
 
     const data = await res.json();
     renderCountry(data[0]);
-  };
-} catch (err) {
-  console.error(err);
-  throw err;
-}
+
+    return `You are in ${dataGeo.city}`;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
 
 whereAmI()
   .then((city) => console.log(city))
@@ -543,7 +547,38 @@ whereAmI()
   .finally(() => console.log("finished"));
 ```
 
-In `catch` block, we manually throw the error so that it can be caught by `catch` method. But it's a weird mix of old and new, so we can use IIFE to use `async/await`:
+In the `getPosition` function, we do not need to catch the error because we've already built our promise so that it automatically rejects in that case. But with reverse geocoding and get country data, the promise only gets rejected when the user loses internet connection. So we need to manually throw new error in case of 403 or 404 error.
+
+However, if we run into error in the async function, it will immediately jump to the `catch` block, so the `return` will never be reached. But in the console, we get `undefined` from `.then` method, not from `.catch`. So even if there is an error in async function, the promise it returns is still fulfilled.
+
+```js
+const whereAmI = async function (country) {
+  try {
+    // ......
+
+    // Country data
+    const res = await fetch(`some wrong url`);
+    if (!res.ok) throw new Error("Cannot get country");
+
+    const data = await res.json();
+    renderCountry(data[0]);
+
+    return `You are in ${dataGeo.city}`;
+  } catch (err) {
+    console.error(err);
+
+    // Reject promise returned from async function
+    throw err;
+  }
+};
+
+whereAmI()
+  .then((city) => console.log(city))
+  .catch((err) => console.error(err))
+  .finally(() => console.log("finished"));
+```
+
+In `catch` block, we need to manually rethrow the error so that it can be caught by `catch` method. But it's a weird mix of old and new, so we can use IIFE here when we are calling the `whereAmI` function, and turn it into `async/await`:
 
 ```javascript
 (async function () {
@@ -554,7 +589,7 @@ In `catch` block, we manually throw the error so that it can be caught by `catch
     console.error(err);
   }
   console.log("finished");
-});
+})();
 ```
 
 ## Promise combinators
@@ -660,9 +695,6 @@ It will return the first fulfilled and ignore any rejected ones.
   console.log(data);
 })();
 ```
-
-🟡 Note:
-`async`function will always return a promise.
 
 ```javascript
 const loadAll = async function (imgArr) {

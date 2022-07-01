@@ -3,7 +3,7 @@
 `this` is not static. It depends on how the function is called, and the function is only assigned when the function is actually called.
 
 - Method: \<Object that is **calling the method**\> (_not the object in which we wrote the method_)
-- Sinple function call: in strict mode, `undefined`; otherwise, `window`
+- Simple function call: in strict mode, `undefined`; otherwise, `window`
 - Arrow functions: do not get its own `this` keyword, but use lexical `this`, which is `this` keyword of its **parent scope**
 - Event listener: \<DOM element that the handler is attached to\>
 

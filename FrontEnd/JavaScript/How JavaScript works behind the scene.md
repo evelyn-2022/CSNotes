@@ -74,23 +74,21 @@ WHAT’S INSIDE EXECUTION CONTEXT?
 2. Scope chain
 3. `this` keyword
 
-==Note==: argument object and `this` keyword are not in arrow functions!
+🟡 Note: argument object and `this` keyword are not in arrow functions!
 
 The content of execution context is generated in a **creation phase**, right before execution.
 
-**Call stack**: “Place” where execution contexts get
-stacked on top of each other, to keep
-track of where we are in the execution
+**Call stack**: “Place” where execution contexts get stacked on top of each other, to keep track of where we are in the execution.
 
 ## Scoping and scope in JavaScript
 
-<kp>coping: </kp>How our program’s variables are organized and accessed. “Where do variables live?” or “Where can we access a certain variable, and where not?”;
+- Scoping: How our program’s variables are organized and accessed. “Where do variables live?” or “Where can we access a certain variable, and where not?”;
 
-<kp>Lexical scoping:</kp> Scoping is controlled by placement of functions and blocks in the code;
+- Lexical scoping: Scoping is controlled by placement of functions and blocks in the code;
 
-<kp>Scope:</kp> Space or environment in which a certain variable is declared (variable environment in case of functions). There is global scope, function scope, and block scope;
+- Scope: Space or environment in which a certain variable is declared (variable environment in case of functions). There is global scope, function scope, and block scope;
 
-<kp>Scope of a variable:</kp> Region of our code where a certain variable can be accessed.
+- Scope of a variable: Region of our code where a certain variable can be accessed.
 
 <img src="https://s2.loli.net/2022/02/26/SqIaDTVrFbNB4RO.png" >
 
@@ -106,7 +104,7 @@ Makes some types of variables accessible/usable in the code before they are actu
 
 <img src="https://s2.loli.net/2022/02/27/MpqfN2vkU1VQsho.png" >
 
-we can use function declarations before they are actually declared in the code, because they are stored in the **variable environment object**, even before the code starts executing;
+We can use function declarations before they are actually declared in the code, because they are stored in the **variable environment object**, even before the code starts executing;
 
 Unlike functions, when we try to access a `var` variable before it's declared in a code, we don't get the declared value but we get _undefined_;
 
@@ -124,13 +122,13 @@ const addExpr = function (a, b) {
 addExpr(2, 5, 8, 12); // Output will be an array of 2, 5, 8, 12
 ```
 
-==Note:== arrow functions do not get arguments keyword.
+🟡 Note: arrow functions do not get arguments keyword.
 
 ## Primitives and Objects
 
-<kp>Primitives (primitive types)</kp>including _number, string, boolean, undefined, null, symbol and bigint_ are stored in **call stack**;
+- Primitives (primitive types): including _number, string, boolean, undefined, null, symbol and bigint_ are stored in **call stack**;
 
-<kp>Objects (reference types)</kp>including _object literal, arrays, functions and more_ are stored in **heap**.
+- Objects (reference types): including _object literal, arrays, functions and more_ are stored in **heap**.
 
 <img src="https://s2.loli.net/2022/02/27/Zt7dfpyjB2UEWM3.png" >
 
