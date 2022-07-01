@@ -1,3 +1,5 @@
+# Asynchronous
+
 ## Consuming a promise
 
 1. Old way of making an AJAX call:
@@ -44,7 +46,7 @@ const request = fetch("https://restcountries.com/v3.1/name/united")
   });
 ```
 
-==Note:== Each `.then()` **returns a newly generated ==promise object==**, which can optionally be used for chaining. The value returned by `then` will become _the fulfilled value of the promise_.
+🟡 Note: Each `.then()` **returns a newly generated promise object**, which can optionally be used for chaining. The value returned by `then` will become _the fulfilled value of the promise_.
 
 Processing continues to the next link of the chain even when a `.then()` **lacks a callback function that returns a Promise object**. Therefore, a chain can safely omit every rejection callback function until the final `.catch()`. Example:
 
@@ -659,7 +661,7 @@ It will return the first fulfilled and ignore any rejected ones.
 })();
 ```
 
-==Note:==
+🟡 Note:
 `async`function will always return a promise.
 
 ```javascript
