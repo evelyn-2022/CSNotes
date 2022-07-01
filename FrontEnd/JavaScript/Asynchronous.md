@@ -286,19 +286,22 @@ const getCountryData = function (country) {
 
 ## Asynchronous way
 
-Since JavaScript only has one thread of execution, asynchronous tasks will run in the **web API environment** of the browser, not in call stack where code is actually executed.
+Since JavaScript only has one thread of execution, asynchronous tasks will run in the **web API environment** of the browser, not in call stack where code is actually executed. Everything related to **DOM** run in the **web API environment**.
+
 ![](./resources/runtime-in-browser.png)
+
 The callback functions will be put into callback queue waiting in line. This means that if we have a function `setTimeout((someFunction), 5000)`, the callback function will be added to callback queue after five minutes. But if there are any other callback functions in the queue, it has to wait for some time. So the timer duration that you define is not a guarantee.
+
 ![](./resources/callback-queue.png)
 
 **Event loop:**
-Event loop looks into the call stack and determines whether it's empty or not. If the stack is indeed empty, which means that there's currently no code being executed, then it will take the first **callback** from the **callback queue** and put it on the **call stack** to be executed. This is called an **event loop tick**.
+Event loop looks into the call stack and determines whether it's empty or not, except for the global context (what is [execution context](./How%20JavaScript%20works%20behind%20the%20scene.md##%20Execution%20context)). If the stack is indeed empty, which means that there's currently no code being executed, then it will take the first **callback** from the **callback queue** and put it on the **call stack** to be executed. This is called an **event loop tick**.
 
 To sum up what happens in the code:
 
-1. The image is loaded asynchronously in the web API environment, not in the call stack. In the meantime, the rest of the code keeps running.
-2. The `addEventListener` do not put the callback directly in the callback queue. It simply registers the callback, which then keeps waiting in the web API's environment until the load event is fired off.
-3. After the image is loaded, the callback function is put into callback queue.
+1. The image is loaded asynchronously in the _web API environment_, not in the call stack. In the meantime, the rest of the code keeps running.
+2. The `addEventListener` do not put the callback directly in the callback queue. It simply **registers the callback in the web API's environment**, which then keeps waiting until the load event is fired off.
+3. After the image is loaded, the callback function is put into callback queue. (The callback queue also contains callbacks coming from _DOM events_ like clicks or key presses or whatever).
 4. Then in the callback queue, this callback function keeps waiting for the event loop to pick it up and put it on the call stack.
 5. The **promise** returned by `fetch` also has callback function, and callbacks returned by promises has a special queue called **microtasks queue**. It has priority over _callback queue_ and will can cut in line before all other regular callbacks.
 

@@ -12,6 +12,8 @@
      * Sub bullets
 </details>
 
+---
+
 Two important rules:
 
 1. Make sure you have an empty line after the closing `</summary>` tag, otherwise the markdown/code blocks won't show correctly.

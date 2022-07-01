@@ -1,21 +1,16 @@
-# Theories about javascript
+# How JavaScript works behind the scene
 
-## Definition
+## Definitions
 
 ### Multi-paradigm language
-
-Three popular paradigms:- procedural programming: organizing the code in a linear way
-
-- object-oriented programming (OOP)
-- functional programming (FP)
-
-We can also classify paradigms as _imperative_ or _declarative_.
 
 Three popular paradigms:
 
 - procedural programming: organizing the code in a linear way
 - object-oriented programming (OOP)
 - functional programming (FP)
+
+We can also classify paradigms as _imperative_ or _declarative_.
 
 ### Prototype-based object-oriented
 
@@ -29,16 +24,16 @@ Functions are treated as variables and can be passed into other functions as var
 
 ### Single-threaded and non-blocking event loop
 
-**Concurrency model**: how the ++JavaScript engine++ handles multiple tasks
-happening at the same time
+**Concurrency model**: how the **JavaScript engine** handles multiple tasks happening at the same time
 
-Why do we need that? --
-JavaScript runs in **one single thread**, so it can only do one thing at a time.
+- Why do we need that?
+  JavaScript runs in **one single thread**, so it can only do one thing at a time.
 
-So what about a long-running task? -- Sounds like it would block the single thread. However, we want non-blocking
-behavior!
+- So what about a long-running task?
+  Sounds like it would block the single thread. However, we want non-blocking behavior.
 
-How do we achieve that? -- By using an **event loop**: takes long running tasks, executes them in the “background”, and puts them back in the main thread once they are finished.
+- How do we achieve that?
+  By using an **event loop**: takes long running tasks, executes them in the “background”, and puts them back in the main thread once they are finished.
 
 ## The JavaScript engine and runtime
 
