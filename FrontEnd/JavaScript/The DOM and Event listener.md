@@ -1,39 +1,144 @@
 ## The DOM
 
-We called a method on `document`. `document` is a globally available variable in the browser that you use to interact with the HTML and CSS.
+The DOM is the interface between all JavaScript code and the browser. DOM tree is a tree structure generated from an HTML document by browser on load. DOM methods and properties are not part of JavaScript. They belong to web APIs.
 
-To modify multiple elements:
+![](resources/DOM-tree.png)
+
+DOM tree has different types of nodes. Every node type can inherit from its parent node types. For instance, we can use `addEventListener` on an element because there is a special node type called `EventTarget` which is a parent of both the node type and also the window node type.
+
+![](resources/event-target.png)
+
+## Element selector
+
+### Special elements
+
+Special elements don't need to use any selector:
+
+- document element: `document.documentElement`
+- head: `document.head`
+- body: `document.body`
+
+### getElementBy...
+
+`getElementBy` returns an **HTML collection**. It is a **live collection**, which means that ❗️if the DOM changes, then this collection is also immediately updated automatically❗️.
+
+- `.getElementsByTagName()` search for specific tag name like `<li>`
+- `getElementsByClassName()` search for specific class name, e.g. `document.getElementByClassName("btn");`, return an array;
+- `getElementById()` return a single item. e.g. select an element with id = "title" and change inner text to goodbye: `document.getElementById("title").innerHTML = "goodbye";`
+
+### querySelector
+
+- element: `document.querySelector("l1");`,
+- class: `document.querySelector(".btn");`,
+- id: `document.querySelector("#title");`
+
+We can also combine them to create hierarchical selectors.
+
+If more than one element match the selector, only the first one will be returned.
+
+`querySelectorAll` can select all the elements that match the selector, and return an array. This returns a **node list** of all elements selexted by the selector. ❗️A node list will not be updated automatically❗️.
+
+Values are passed in _as strings_ in js: `document.querySelectorAll("button")[2].style.color = "red";`
+
+🟡 Note: these selectors can also be used on elements other than `document`, so that we can select their children or descendant elements.
+
+---
+
+## Manipulating elements
+
+### Changing text
+
+- `.innerHTML` or `.textContent`, the former one gives you all that between the html tag, while the latter one only return the text content. So if we also need to change the style of text, we can use `document.querySelector("h1").innerHTML = "<em>goodbye</em>";`
+- `.value`: change the value of a text field.
+
+### Creating and removing an element
+
+```js
+const elem = document.createElement("div"); // Returns a DOM element, but we still need to insert it to the page
+
+elem.remove();
+```
+
+### Inserting HTML elements
+
+- `element.insertAdjacentHTML(position, text)`. _position_ can take four parameters: `beforebegin`, `afterbegin`, `beforeend` and `afterend`.
+- `document.createElement()` to create a DOM element
+- `.prepend()` to insert something as the first child of an element; `.append` add as last child.
+- `.before()` and `.after()`: add a message before or after an element.
+
+==Note:== If we use `prepend` and `append` at the same time, the element will not be both prepended and appended, `append` will only move the element from before to after because a DOM element is unique and can only exist at one place each time.
+
+```js
+header.prepend(elem);
+header.append(elem);
+```
+
+To insert multiple copies of the same element, we first copy the first element and pass in `true`, which means all the child elements will also be copied.
+
+```js
+header.append(elem.cloneNode(true));
+```
+
+### Changing attributes
+
+`document.querySelector("a").attributes;` will return a list of all the attributes that are currently attached to the html element. We can use `document.querySelector("a").getAttribute("href");` to get the attribute, use `document.querySelector("a").setAttribute("href", "http://abcd.com");` to change the attribute.
+
+### Child & parent node / element
+
+- child nodes: `.childNodes`, returns a **live NodeList** of child nodes of the given element where the first child node is assigned index 0. Child nodes include _elements, text and comments_.
+  child elements: to get a collection containing _only elements_, use `.children`.
+
+- First / last child node / element
+  First child node: `.firstChild`;
+  First child element: `.firstElementChild`.
+
+- Parent node / element:
+  parent node: `.parentNode`;
+  parent element: `parentElement`.
+
+- Ancestor:
+  The `closest()` method traverses the Element and its parents (heading toward the document root) until it finds a node that matches the provided selector string. Will return itself or the matching ancestor. If no such element exists, it returns _null_.
 
 ```javascript
-<ul>
-  <li class="js-target">Unchanged</li>
-  <li class="js-target">Unchanged</li>
-  <li>Won't Change</li>
-  <li class="js-target">Unchanged</li>
-  <li>Won't Change</li>
-  <li class="js-target">Unchanged</li>
-</ul>
-<script>
-  const elementsToChange = document.querySelectorAll('.js-target');
-  for (let i = 0; i < elementsToChange.length; i++) {
-    const currentElement = elementsToChange[i];
-    currentElement.innerText = "Modified by JavaScript!";
+h1.closest(".header").color = "red";
+```
+
+Set the closest ancestor to h1 element with a class name of header to red. It is extremely useful in **event delegation**.
+
+- Siblings:
+  In JavaScript, we can only access direct siblings.
+  Sibling nodes: `.nextSibling` and `.previousSibling`;
+  Sibling elements: `.nextElementSibling` and `.previousElementSibling`.
+
+To get all the siblings (including itself), get to the parent element and get all its child elements from there:
+
+```javascript
+[...h1.parentElement.children].forEach(function (e) {
+  if (e !== h1) {
+    e.backgroundColor = "red";
   }
-</script>
+});
 ```
 
-## Events and listeners
+Here, we set the background color of all h1's siblings to red.
+
+---
+
+## addEventListener
+
+In HTML, when the submit button is clicked, the page will reload. We can prevent from submitting by adding:
 
 ```javascript
-<button class="event-button">Click me!</button>
-<script>
-  const button = document.querySelector('.event-button');
-  button.addEventListener('click', function () {
-    alert("Hey there!");
-  });
+btn.loginIn.addEventListener("click", function (e) {
+  e.preventDefault();
+});
 ```
 
-People often get confused seeing `});` on the last line. The first `}` is closing the function, the second `)` is closing the function call of `addEventListener`, and the `;` ends the statement.
+To make the area lose focus, use:
+
+```javascript
+inputLogin.blur();
+```
 
 ### With and without parenthesis
 
@@ -59,35 +164,4 @@ document.querySelector("button").addEventListener("click", function () {
 
 If you need to pass arguments to a function that is called by an event handler or listener, but cannot add parenthesis, you can wrap the function call in an anonymous function, and the named function that requires the arguments lives inside the anonymous function.
 
-### Keyboard event listener
-
-To listen for keyboard events, we can add the event listener to the whole document.
-We pass in a parameter `event` or `e` in the function to allow us to tap into the event that triggered the event listener.
-If we `console.log(event);`, we get back the information about which key get pressed and other information.
-
-```javascript
-document.addEventListener("keydown", function (event) {
-  console.log(event.key);
-});
-```
-
-## Event delegation (event bubbling / event flow)
-
-If you have a bunch of elements that you need to listen for events on, you could attach an event listener to each but that's a bit tedious to do. Instead what is sometimes easier to do is to use what's called **event bubbling**. When event fires on an element, after that "bubbles" up to its parent, and then its parent, and its parent, etc. until it's at the root element.
-
-```javascript
-<div class="button-container">
-  <button>1</button>
-  <button>2</button>
-  <button>3</button>
-  <button>4</button>
-  <button>5</button>
-</div>
-<script>
-  document.querySelector('.button-container').addEventListener('click', function(event) {
-    alert(`You clicked on button ${event.target.innerText}`);
-  });
-</script
-```
-
-You can see that we only bound one event listener, and that was the `div` above it. Then, when we click the button, we're using the event parameter that is being passed into the callback. An event listener's first parameter is always an event object. There's lots of information on the event object but we're most concerned with `event.target`. target is **the tag that the event originated from**. In this case it'll be the button that caused the event. And we know that with tags you can use the innerText property to get the text inside of them. That's how we able to alert the correct number.
+To remove eventListener, `elem.removeEventListener('click', nameOfFunction);`

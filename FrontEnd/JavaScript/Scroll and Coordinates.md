@@ -1,6 +1,6 @@
 # Scroll and Coordinates
 
-To get the current scorll of viewport:
+To get the current scroll of viewport:
 
 ```js
 console.log(window.pageXOffset, window.pageYOffset);
@@ -38,14 +38,18 @@ btn.addEventListener("click", function (e) {
 Then we can use the global function on the window to scroll to certain position (we need to add scroll position to its position relative to viewport):
 
 ```js
-window.scrollTo(scl.left + window.pageXOffset, scl.top + window.pageYOffset);
+window.scrollTo(
+  s1coords.left + window.pageXOffset,
+  s1coords.top + window.pageYOffset
+);
 ```
 
 <img src='https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect/element-box-diagram.png'>
 
-To implement smooth scroll:
+To implement smooth scroll, we can specify an object with left, top and behavior properties:
 
 ```js
+const s1coords = section1.getBoundingClientRect();
 window.scrollTo({
   left: s1coords.left + window.pageXOffset,
   top: s1coords.top + window.pageYOffset,
