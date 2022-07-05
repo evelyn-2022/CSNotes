@@ -101,3 +101,5 @@ document.querySelector(".nav__links").addEventListener("click", function (e) {
   });
 </script>
 ```
+
+🟡 Note: Event delegation is extremely useful when we add event listener to elements that don't exist when the page first loads, because we can add event listener to their parent elements instead.

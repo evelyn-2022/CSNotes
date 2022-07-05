@@ -165,3 +165,32 @@ document.querySelector("button").addEventListener("click", function () {
 If you need to pass arguments to a function that is called by an event handler or listener, but cannot add parenthesis, you can wrap the function call in an anonymous function, and the named function that requires the arguments lives inside the anonymous function.
 
 To remove eventListener, `elem.removeEventListener('click', nameOfFunction);`
+
+---
+
+## Lifecycle DOM events
+
+### After HTML is loaded
+
+```js
+document.addEventListener("DOMContentLoaded", function (e) {
+  console.log("HTML parsed and DOM tree built!");
+});
+```
+
+### After all resources are loaded
+
+```js
+window.addEventListener("loaded", function (e) {
+  console.log("Page fully loaded");
+});
+```
+
+### Before leaving the page
+
+```js
+window.addEventListener("beforeunload", function (e) {
+  e.preventDefault();
+  e.returnValue = "";
+});
+```
