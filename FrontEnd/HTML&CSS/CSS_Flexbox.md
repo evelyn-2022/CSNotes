@@ -8,12 +8,12 @@ Adding `display: flex` to an element turns it into a flex container. This makes 
 
 Note: The **default value** for the flex-direction property is **row**.
 
-```
-  #box-container {
-    display: flex;
-    height: 500px;
-    flex-direction: row-reverse;
-  }
+```css
+#box-container {
+  display: flex;
+  height: 500px;
+  flex-direction: row-reverse;
+}
 ```
 
 [flex-direction property](https://codepen.io/ZoeyClyde/pen/RwLaJQe)
@@ -175,16 +175,16 @@ The default property settings are `flex: 0 1 auto;`.
 
 The `order` property is used to tell CSS the order of how flex items appear in the flex container. By default, items will appear in the same order they come in the source HTML. The property takes numbers as values, and negative numbers can be used.
 
-```
-  #box-1 {
-    background-color: dodgerblue;
-    order: 2;
-  }
+```css
+#box-1 {
+  background-color: dodgerblue;
+  order: 2;
+}
 
-  #box-2 {
-    background-color: orangered;
-    order: 1;
-  }
+#box-2 {
+  background-color: orangered;
+  order: 1;
+}
 ```
 
  <br>
