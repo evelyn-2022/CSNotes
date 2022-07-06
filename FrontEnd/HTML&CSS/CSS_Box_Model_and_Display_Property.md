@@ -2,6 +2,33 @@
 
 ## Box Model
 
+### Boxing Sizing
+
+![](resources/fill-area.png)
+
+**Fill area** is the area that gets filled with background color or background image, it includes content area, padding and border.
+
+The CSS `box-sizing` property allows us to include the padding and border in an element's total width and height.
+
+#### Content Box
+
+The content-box value is the default value, leaving the box model as an additive design.
+
+#### Border Box
+
+The `border-box` value alters the box model so that any **border or padding** property values are included within the _width_ and _height_ of an element.
+For example, to keep the width at 300px, no matter the amount of padding, you can use the `box-sizing` property. This causes the element to maintain its width; if you increase the padding, the available content space will decrease:
+
+#### Padding Box
+
+The `padding-box` value alters the box model by including any **padding** property values within the _width_ and _height_ of an element.
+
+The total width of an element with `display: box` (content box vs border box):
+
+![](resources/border-box.png)
+
+---
+
 ### Margin Collapse
 
 If the bottom margin of any box touches the top margin of another, the browser will render it differently than you might expect. It will only show the larger of the two margins. If both margins are the same size, it will only show one. (https://stackoverflow.com/questions/19718634/how-to-disable-margin-collapsing#:~:text=%20There%20are%20two%20main%20types%20of%20margin,margins%20between%20parent%20and%20child%20elements%20More%20)
@@ -37,7 +64,9 @@ The `border-style` property specifies what kind of border to display:
 The border-style property can have from one to four values (for the top, right, bottom and left border)
 
 ```
+
 p.mix {border-style: dotted dashed solid double;}
+
 ```
 
 ![mixed_border.jpg](https://s2.loli.net/2021/12/10/SCkwGdHWTiuYAse.jpg)
@@ -185,30 +214,3 @@ There is also a shorthand for targetting all four corners at once; first you spe
 </style>
 
 <p class="rad"></p>
-
-<br>
-
-### Boxing Sizing
-
-The CSS `box-sizing` property allows us to include the padding and border in an element's total width and height.
-
-#### Content Box
-
-The content-box value is the default value, leaving the box model as an additive design.
-
-#### Border Box
-
-The `border-box` value alters the box model so that any **border or padding** property values are included within the _width_ and _height_ of an element.
-For example, to keep the width at 300px, no matter the amount of padding, you can use the `box-sizing` property. This causes the element to maintain its width; if you increase the padding, the available content space will decrease:
-
-```
-div {
-	width: 300px;
-	padding: 25px;
-	box-sizing: border-box;
-}
-```
-
-#### Padding Box
-
-The `padding-box` value alters the box model by including any **padding** property values within the _width_ and _height_ of an element.
