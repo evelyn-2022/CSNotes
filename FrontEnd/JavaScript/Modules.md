@@ -6,7 +6,8 @@
 As of ES6, JavaScript has a native built-in module system. ES6 modules are modules that are actually stored in files and **each file is one module**.
 
 ![](./resources/es6-modules.png)
-==Note:==
+
+🟡 Note:
 
 1. `export` and `import` can only happen _at the top level_, which means they can only happen at the top level, outside any function or block.
 2. Imports are hoisted:

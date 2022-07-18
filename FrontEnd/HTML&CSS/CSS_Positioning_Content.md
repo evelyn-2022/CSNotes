@@ -59,20 +59,13 @@ To prevent content from wrapping around floated elements, we need to clear, or c
 
 #### Clearfix
 
-If an element is taller than the element containing it, and it is floated, it will overflow outside of its container. Use `overflow: auto;` or `overflow: hidden` or the following code to fix it.
+If all elements in a container are floated, the container will collapse and lose its height. We can use clearfix to fix the problem.
 
-```
-.clearfix:before,
-.clearfix:after {
-	content: "";
-	display: table;
-}
-.clearfix:after {
-	clear: both;
-}
-.clearfix {
-	clear: both;
-	*zoom: 1;
+```css
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
 }
 ```
 

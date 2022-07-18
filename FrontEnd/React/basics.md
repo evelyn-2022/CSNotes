@@ -18,7 +18,7 @@
 ```js
 // 1) Import the React and ReactDOM libraries
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
 
 // 2) Get a reference to the div with ID rooot
 const el = document.getElementById("root");
@@ -36,4 +36,31 @@ function App() {
 }
 // 5) Show the component on the screen
 root.render(<App />);
+```
+
+**Props:**
+System for passing data _from a parent component to a child component_. The goal is to customize or configure a child component.
+
+A component is a **function or class** that produces HTML to show the user (using JSX) and handles feedback from the user (using event handlers).
+
+How react is now:
+|**Class** components|**Function** components|
+|---|---|
+|Can produce JSX to show content to the user|Can produce JSX to show content to the user|
+|Can use the Lifecycle Method system to run code as specific points in time|Can use **Hooks** to run code at specific points in time|
+|Can use the 'state' system to update content on the screen|Can use **Hooks** to acces state system and update content on screen|
+
+**State:**
+State is a JS object that contains data relevant to a component. It is only usable with class components. Updating 'state' on a component causes the component to (almost) **instantly rerender**.
+
+- State must be initialized when a component is created.
+- State can **only** be updated using the function 'setState' (we only use direct assignment when initializing state). `setState` function is built into our component automatically by subclassing react component. Whenever we update our state, we are not required to update every property in it. Updating our state is an additive process.
+
+## Lifecycle
+
+```mermaid
+flowchart TB
+
+A[constructor]-->B[render]--Content visible on screen-->C[componentDidMount]--Sit and wait for updates-->D[componentDidUpdate]--Sit and wait until the component is no longer shown-->E[componentWillUnmount]
+
 ```
